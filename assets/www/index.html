@@ -1,10 +1,113 @@
 <!DOCTYPE HTML>
-<html>
-  <head>
-    <title>PhoneGap</title>
-    <script type="text/javascript" charset="utf8" src="cordova-1.5.0.js"></script>
-  </head>
-  <body>
-      <h1>Pedometer</h1>
-  </body>
-</html> 
+<HTML>
+  <HEAD>
+    <TITLE>PhoneGap</TITLE>    
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
+    <!-- cordova -->
+    <SCRIPT type="text/javascript" charset="utf8" src="cordova-2.3.0.js"></SCRIPT>
+
+    <!-- jquery -->
+	<META name="viewport" content="width=device-width, initial-scale=1">
+    <LINK rel="stylesheet" href="jquery/jquery.mobile-1.3.1.min.css" />
+    <SCRIPT type="text/javascript" charset="utf8" src="jquery/jquery-1.9.0.min.js"></SCRIPT>
+    <SCRIPT type="text/javascript" charset="utf8" src="jquery/jquery.mobile-1.3.1.min.js"></SCRIPT>
+
+    <SCRIPT type="text/javascript">
+    <!--
+      var watchID_accelea;
+      var iCount = 0;
+      
+      function onLoad() {
+        refreshCount();
+        document.addEventListener("deviceready", onDeviceReady, false);
+      }
+    
+      function onDeviceReady() {
+        navigator.accelerometer.getCurrentAcceleration(onSuccess, onError);
+        startSensor();
+      } 
+    
+      function startSensor(){
+        var options = { frequency: 100 };         
+        watchID_accelea = navigator.accelerometer.watchAcceleration(onSuccess, onError, options);
+      }
+    
+      function stopSensor(){     
+        navigator.accelerometer.clearWatch(watchID_accelea);
+      }
+     
+      function onSuccess(acceleration) {    
+        document.getElementById("acceleration_x").value = acceleration.x;
+        document.getElementById("acceleration_xs").value = acceleration.x.toFixed(2);
+            
+        document.getElementById("acceleration_y").value = acceleration.y;
+        document.getElementById("acceleration_ys").value = acceleration.y.toFixed(2);
+            
+        document.getElementById("acceleration_z").value = acceleration.z;
+        document.getElementById("acceleration_zs").value = acceleration.z.toFixed(2);
+            
+        document.getElementById("time_stamp").value = acceleration.timestamp;  
+        
+        iCount = iCount + 1;
+        refreshCount();
+      } 
+    
+      function onError() { 
+        alert('エラーが発生しました。');
+      }
+      
+      function refreshCount() {
+        var sHtml = "";
+        sHtml += "<CENTER>";
+        sHtml += "<TABLE border=1><TR><TD>"
+        sHtml += "<CENTER><FONT size=6><H1>";
+        sHtml += ("0000000" + String(iCount)).slice(-7);
+        sHtml += "</H1></FONT></CENTER>";
+        sHtml += "</TD></TR></TABLE>";
+        sHtml += "</CENTER>";
+        document.getElementById("count").innerHTML = sHtml;
+      }
+    // -->
+    </SCRIPT>
+
+  </HEAD>
+  <BODY onLoad="onLoad()">
+    <DIV data-role="page" id="main">
+      <DIV data-role="header" data-position="fixed"><H1>Pedometer</H1></DIV>
+      <DIV data-role="content">
+        <DIV id="count" name="count"></DIV>
+        <center>
+        加速度センサー
+        <br>
+        X軸上の加速度
+        <table><tr>
+        <th><input type="text" id="acceleration_x" style="width:200px" value=""></th>
+        <th><input type="text" id="acceleration_xs" style="width:50px" value=""></th>
+        </tr></table>
+
+        <br>
+        Y軸上の加速度
+        <table><tr>
+        <th><input type="text" id="acceleration_y" style="width:200px" value=""></th>
+        <th><input type="text" id="acceleration_ys" style="width:50px" value=""></th>
+        </tr></table>
+
+        <br>
+        Z軸上の加速度
+        <table><tr>
+        <th><input type="text" id="acceleration_z" style="width:200px" value=""></th>
+        <th><input type="text" id="acceleration_zs" style="width:50px" value=""></th>
+        </tr></table>
+
+        <br>
+        タイムスタンプ
+        <input type="text" id="time_stamp" style="width:200px" value="">
+        </center>
+        <br><br>
+        
+      </DIV>
+      <DIV data-role="footer" data-position="fixed" style="text-align:center">(c) 2013 Chubachi Project</DIV>
+    </DIV>
+  </BODY>
+</HTML> 
